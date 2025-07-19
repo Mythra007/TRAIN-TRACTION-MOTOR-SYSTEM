@@ -1,0 +1,40 @@
+*============================*
+* PARAMETERS (for Fault Injection) *
+*============================*
+.param CURRENT_INJECT_FACTOR = 200 ; Factor to multiply load for overcurrent/stall (e.g., 200 * base load)
+.param TEMP_INJECT_VALUE = 100   ; Forced temperature value for overtemp (e.g., 100 degrees equivalent)
+.param PWM_STUCK_TIME_START = 5s ; Time when PWM stuck fault starts
+.param PWM_STUCK_TIME_END = 6s   ; Time when PWM stuck fault ends
+.param INSUL_DAMAGE_INJECT_START = 4s ; Time when insulation damage acceleration starts
+.param INSUL_DAMAGE_INJECT_END = 9s   ; Time when insulation damage acceleration ends
+
+
+*============================*
+* FAULT INJECTION SNIPPETS   *
+*============================*
+
+* --- 1. Overcurrent & Motor Stall Fault Injection ---
+* Modify V_LOAD_PROFILE to create high load conditions at specific times.
+* This will cause overcurrent and can lead to stall if load is too high.
+* REPLACE your existing V_LOAD_PROFILE definition with this one.
+V_LOAD_PROFILE LOAD_PROFILE_NODE GND PWL(0 10 3s 10 3.1s {CURRENT_INJECT_FACTOR} 5s {CURRENT_INJECT_FACTOR} 5.1s 10 10s 10) ; Inject high load from 3.1s to 5s. Factor of 1000 for stall.
+
+
+* --- 2. Overtemperature Fault Injection ---
+* Modify E_TEMP_SOURCE to force TEMP_NODE above threshold during fault.
+* REPLACE your existing E_TEMP_SOURCE definition with this one.
+E_TEMP_SOURCE TEMP_NODE GND VALUE={25 + (V(CURRENT_SENSE_OUT)*V(CURRENT_SENSE_OUT)*10) + (time > 6s && time < 8s ? {TEMP_INJECT_VALUE} : 0)}
+
+
+* --- 3. PWM Stuck Fault Injection ----
+* This E-source will override the normal PWM_OUT_NODE during the fault time, forcing it to 0V (stuck low).
+* Add this line AFTER your V_PWM_DRIVE definition (and its R_PWM_DRIVE_SERIES if you use it).
+* It will take precedence if defined later or if its output is connected to the same node.
+* It assumes your original PWM source is still named V_PWM_DRIVE.
+E_PWM_STUCK_INJECTOR PWM_OUT_NODE GND VALUE={(time > {PWM_STUCK_TIME_START} && time < {PWM_STUCK_TIME_END} ? 0 : V(V_PWM_DRIVE))}
+
+
+* --- 4. Insulation Damage Fault Injection ---
+* Modify E_INS_STRESS to force higher stress (simulates prolonged high temperature).
+* REPLACE your existing E_INS_STRESS definition with this one.
+E_INS_STRESS INS_STRESS_RAW_NODE GND VALUE={(V(TEMP_NODE) - 60) + (time > {INSUL_DAMAGE_INJECT_START} && time < {INSUL_DAMAGE_INJECT_END} ? 100 : 0)}

@@ -1,0 +1,29 @@
+* --- Model Definitions ---
+.model __D1 D(Is=1n Rs=0.1) ; Diode model from KiCAD netlist
+.model __D2 D(Is=1n Rs=0.1) ; Diode model from KiCAD netlist
+
+* --- IGBT/VDMOS Models ---
+* Mnemonic: Drain Gate Source Body ModelName
+.model __Q2 VDMOS(Vto=1 Kp=50m Rd=0.01 Rs=0.01)
+.model __Q1 VDMOS(Vto=1 Kp=50m Rd=0.01 Rs=0.01)
+.model __Q3 VDMOS(Vto=1 Kp=50m Rd=0.01 Rs=0.01)
+.model M_BRAKE_VDMOS VDMOS(Vto=1 Kp=50m Rd=0.01 Rs=0.01)
+
+* PID Controller Subcircuit
+.subckt PID_CONTROLLER VREF VSPEED OUT GND
+.param Kp=10 Ki=100 Kd=0.01
+.param R_DERIV_VAL_FIX = 1k ; Define R_DERIV value as a parameter for robustness
+.param C_DERIV_VAL_FIX = 1n ; Define C_DERIV value as a parameter for robustness
+
+E_ERR ERR GND VALUE={V(VREF)-V(VSPEED)}
+E_P P_TERM GND VALUE={Kp*V(ERR)}
+C_INT INT_NODE GND 1u
+R_INT ERR INT_NODE 1meg
+E_I I_TERM GND VALUE={Ki*V(INT_NODE)}
+
+C_DERIV_NEW D_NODE GND {C_DERIV_VAL_FIX} ; Use parameter for C_DERIV
+R_DERIV_NEW ERR D_NODE GND {R_DERIV_VAL_FIX} ; Use parameter for R_DERIV. Gnd is a valid node here.
+
+E_D D_TERM GND VALUE={Kd*ddt(V(ERR))}
+E_SUM OUT GND VALUE={V(P_TERM)+V(I_TERM)+V(D_TERM)}
+.ends PID_CONTROLLER

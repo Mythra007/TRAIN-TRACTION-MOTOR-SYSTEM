@@ -1,0 +1,80 @@
+.title KiCad schematic
+.model __D1 D
+.model __D2 D
+.save all
+.probe alli
+U11 __U11
+V23 GND Net-_U11-V-_ DC 1 
+U6 __U6
+V20 GND Net-_U4-V-_ DC 1 
+U16 __U16
+U17 __U17
+U15 __U15
+U20 __U20
+U19 __U19
+U18 __U18
+V28 Net-_U15-VCC_ GND DC 1 
+V15 Net-_U12-V+_ GND DC 1 
+U12 __U12
+U13 __U13
+V27 Net-_U13-Vdd_ GND DC 1 
+U14 __U14
+V16 GND Net-_U12-V-_ DC 1 
+V4 /CURRENT_THRESHHOLD GND DC 1 
+U1 __U1
+V26 GND Net-_U1-V-_ DC 1 
+L2 Net-_L2-Pad1_ /MOTOR_SPEED_NODE L
+V8 Net-_U2-V+_ GND DC 1 
+U2 __U2
+V9 /STALL_CURRENT_THRESHHOLD GND DC 1 
+V25 GND Net-_U2-V-_ DC 1 
+V13 Net-_U10-V+_ GND DC 1 
+U7 __U7
+V24 GND Net-_U7-V-_ DC 1 
+V14 Net-_U11-V+_ GND DC 1 
+V2 Net-_U1-V+_ GND DC 1 
+C2 Net-_C2-Pad1_ Net-_D1-K_ C
+R7 Net-_U1-+_ GND R
+L1 Net-_D1-K_ Net-_Q2-C_ L
+C1 Net-_Q2-C_ GND C
+D1 GND Net-_D1-K_ __D1
+Q2 __Q2
+R2 Net-_Q2-E_ Net-_R2-Pad2_ R
+R3 Net-_R2-Pad2_ Net-_L2-Pad1_ R
+R6 Net-_Q2-E_ Net-_U1-+_ R
+R4 Net-_U1--_ Net-_U10-+_ R
+R5 Net-_R2-Pad2_ Net-_U1--_ R
+V1 Net-_D2-K_ GND DC 1 
+Q1 __Q1
+R1 Net-_D2-A_ Net-_C2-Pad1_ R
+D2 Net-_D2-A_ Net-_D2-K_ __D2
+V12 Net-_U9-V+_ GND DC 1 
+U8 __U8
+V3 /V_REF GND DC 1 
+U9 __U9
+V17 GND Net-_U9-V-_ DC 1 
+V19 GND Net-_U8-V-_ DC 1 
+V11 Net-_U8-V+_ GND DC 1 
+V29 /USER_CONTROLLED_BRAKE GND DC 1 
+U21 __U21
+U22 __U22
+V30 Net-_U21-VCC_ GND DC 1 
+V7 Net-_U3-V+_ GND DC 1 
+R8 /EXPECTED_CURRENT /MOTOR_SPEED_NODE R
+V18 GND Net-_U3-V-_ DC 1 
+U3 __U3
+V5 /TEMP_THRESHHOLD GND DC 1 
+R10 Net-_E2-N+_ GND R
+E2 Net-_E2-N+_ GND /TEG_OUTPUT_NODE GND 1
+U4 __U4
+V6 Net-_U4-V+_ GND DC 1 
+E1 /MOTOR_SPEED_NODE GND unconnected-_E1-C+-Pad3_ unconnected-_E1-C--Pad4_ 1
+V22 GND Net-_U10-V-_ DC 1 
+U10 __U10
+V10 /STALL_SPEED_THRESHHOLD GND DC 1 
+R9 Net-_Q3-E_ Net-_C3-Pad1_ R
+C3 Net-_C3-Pad1_ GND C
+Q3 __Q3
+V21 GND Net-_U5-V-_ DC 1 
+U5 __U5
+.end
